@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/css/style.min.css">
+  </head>
+  <body onload="start()">
+    <h1>Logbook</h1>
+    <hr>
+    <div id="add" class="no-print">
+      <form>
+        <input type="date" name="datum" id="datum">
+        <input type="text" name="onderwerp" id="onderwerp" placeholder="Subject">
+        <textarea name="omschrijving" id="omschrijving" placeholder="Description"></textarea>
+        <input type="submit" id="zend" value="Submit">
+      </form>
+    </div>
+    <div id="logboek">
+
+    </div>
+    <script type="text/javascript">
+    function start()
+    {
+      for ( var i = 0, len = localStorage.length; i < len; ++i ) {
+        document.getElementById("logboek").innerHTML = "<article><label>" + JSON.parse(localStorage.getItem(localStorage.key(i)))[0] + "</label><h2>"+ JSON.parse(localStorage.getItem(localStorage.key(i)))[1] + "</h2><p>" + JSON.parse(localStorage.getItem(localStorage.key(i)))[2] + "</p></article>" + document.getElementById("logboek").innerHTML;
+      }
+      var currentDate = new Date(new Date().getTime());
+      var day = currentDate.getDate()
+      var month = currentDate.getMonth() + 1
+      var year = currentDate.getFullYear();
+
+      document.getElementById("datum").value =  year + "-" + month + "-" + day;
+      document.getElementById("datum").placeholder =  "Date";
+
+    }
+    document.getElementById("zend").addEventListener("click", function(event){
+      event.preventDefault()
+      var datum = document.getElementById("datum").value;
+      var onderwerp = document.getElementById("onderwerp").value;
+      var omschrijving = document.getElementById("omschrijving").value;
+      var content = [datum, onderwerp, omschrijving];
+      // Store
+      localStorage.setItem( datum, JSON.stringify(content));
+      document.getElementById("logboek").innerHTML = "";
+      for ( var i = 0, len = localStorage.length; i < len; ++i ) {
+        document.getElementById("logboek").innerHTML = "<article><label>" + JSON.parse(localStorage.getItem(localStorage.key(i)))[0] + "</label><h2>"+ JSON.parse(localStorage.getItem(localStorage.key(i)))[1] + "</h2><p>" + JSON.parse(localStorage.getItem(localStorage.key(i)))[2] + "</p></article>" + document.getElementById("logboek").innerHTML;
+      }
+    });
+    </script>
+  </body>
+</html>
